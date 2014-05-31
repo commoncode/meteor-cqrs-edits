@@ -1,0 +1,53 @@
+<template name='editDocument'>
+	<hr>
+	<form
+		class='edit-document-form'
+		data-id='{{_id}}'
+		data-doc-id='{{docId}}'
+		data-doc-type='{{docType}}'>
+
+		<input type='text' name='title' value='{{title}}' class='edit-document-form-input'>
+		<textarea
+			class='edit-document-form-textarea'
+			name='description'>{{description}}</textarea>
+		<input type='hidden' name='docId' value='{{docId}}'>
+		<input type='hidden' name='docType' value='{{docType}}'>
+		<dl>
+			<dt>name:</dt>
+			<dd>
+			{{#with editDiffs}}
+				{{# with diffs}}
+					{{#each title}}{{> diffPart}}{{/each}}
+				{{/with}}
+			{{/with}}
+			</dd>
+			<dt>description:</dt>
+			<dd>
+			{{#with editDiffs}}
+				{{# with diffs}}
+					{{#each description}}{{> diffPart}}{{/each}}
+				{{/with}}
+			{{/with}}
+			</dd>
+			<dt>state:</dt>
+			<dd>{{state}}</dd>
+			<dt>action:</dt>
+			<dd>{{action}}</dd>
+			<dt>docId:</dt>
+			<dd>{{docId}}</dd>
+			<dt>docType:</dt>
+			<dd>{{docType}}</dd>
+			<dt>_id:</dt>
+			<dd>{{_id}}</dd>
+		</dl>
+		<button>commit</button>
+	</form>
+</template>
+
+
+<template name='diffPart'>
+{{#each parts}}
+	{{#if added}}<span style='background-color: lightgreen; text-decoration: underline;'>{{value}}</span>{{/if}}<!--
+	-->{{#if removed}}<span style='background-color: pink; text-decoration: line-through;'>{{value}}</span>{{/if}}{{#unless removed}}{{#unless added}}<span>{{value}}</span>{{/unless}}{{/unless}}
+{{/each}}
+</template>

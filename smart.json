@@ -1,0 +1,8 @@
+{
+  "name": "meteor-cqrs-edits",
+  "description": "Edit Documents for CQRS",
+  "homepage": "https://github.com/commoncode/meteor-cqrs-edits",
+  "author": "Daryl Antony",
+  "version": "0.1.0",
+  "git": "https://github.com/commoncode/meteor-cqrs-edits.git"
+}
