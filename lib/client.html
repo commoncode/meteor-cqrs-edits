@@ -1,7 +1,31 @@
 
-<template name='diffPart'>
-{{#each parts}}
-	{{#if added}}<span style='background-color: lightgreen; text-decoration: underline;'>{{value}}</span>{{/if}}<!--
-	-->{{#if removed}}<span style='background-color: pink; text-decoration: line-through;'>{{value}}</span>{{/if}}{{#unless removed}}{{#unless added}}<span>{{value}}</span>{{/unless}}{{/unless}}
-{{/each}}
+<template name="editDocFormInput">
+  <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
+  <input class="edit-document-form-input" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <small class="edit-document-diff">
+    {{> diffParts}}
+  </small>
+</template>
+
+<template name="editDocFormControls">
+  {{#if create}}
+    <button type="submit" class="aqua">Create</button>
+  {{else}}
+    {{#unless editDocIsReady}}
+      <button type="submit" class="aqua" disabled>Updating...</button>
+    {{else}}
+      <button type="submit" class="aqua">Commit</button>
+    {{/unless}}
+    <button type="button" class="form__actions__delete">Delete</button>
+  {{/if}}
+  <span class="edit-document-action">{{editDoc.action}}</span> ::
+  <span class="edit-document-status">{{editDoc.state}}</span> ::
+  <span class="edit-document-status">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</span>
+</template>
+
+<template name='diffParts'>
+  {{#each parts}}
+    {{#if added}}<span style='background-color: green; text-decoration: underline;'>{{value}}</span>{{/if}}<!--
+    -->{{#if removed}}<span style='background-color: red; text-decoration: line-through;'>{{value}}</span>{{/if}}{{#unless removed}}{{#unless added}}<span>{{value}}</span>{{/unless}}{{/unless}}
+  {{/each}}
 </template>
