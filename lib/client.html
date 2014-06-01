@@ -1,0 +1,7 @@
+
+<template name='diffPart'>
+{{#each parts}}
+	{{#if added}}<span style='background-color: lightgreen; text-decoration: underline;'>{{value}}</span>{{/if}}<!--
+	-->{{#if removed}}<span style='background-color: pink; text-decoration: line-through;'>{{value}}</span>{{/if}}{{#unless removed}}{{#unless added}}<span>{{value}}</span>{{/unless}}{{/unless}}
+{{/each}}
+</template>
