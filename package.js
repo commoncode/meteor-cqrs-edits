@@ -10,7 +10,7 @@ Npm.depends({
 
 Package.on_use(function (api) {
 
-  api.use(['templating'], 'client');
+  api.use(['templating', 'moment'], 'client');
 
   // Load this before client.js so we have Template loaded.
   api.add_files('lib/client.html', 'client');

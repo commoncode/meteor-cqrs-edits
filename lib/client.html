@@ -19,9 +19,12 @@
     {{/unless}}
     <button type="button" class="form__actions__delete">Delete</button>
   {{/if}}
-  <span class="edit-document-action">{{editDoc.action}}</span> ::
-  <span class="edit-document-status">{{editDoc.state}}</span> ::
-  <span class="edit-document-response">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</span>
+  <ul>
+    <li class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">{{editDoc.fromNowOrNow}}</li>
+    <li class="edit-document-action">{{editDoc.action}}</li>
+    <li class="edit-document-status">{{editDoc.state}}</li>
+    <li class="edit-document-status">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</li>
+  </ul>
 </template>
 
 <template name='diffParts'>
