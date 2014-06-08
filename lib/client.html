@@ -1,11 +1,34 @@
 
 <template name="editDocFormInput">
+
   <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
   <input class="edit-document-form-input" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
   <small class="edit-document-diff">
     {{> diffParts}}
   </small>
+
 </template>
+
+
+<template name="editDocFormSelect">
+  <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
+  <select
+    class="edit-document-form-select"
+    data-data-type="integer"
+    data-doc-id="{{docId}}"
+    data-doc-type="{{docType}}"
+    id="{{docType}}-{{docId}}-{{nameSpace}}"
+    name="{{nameSpace}}">
+    {{#each selectDocuments}}
+      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
+    {{/each}}
+  </select>
+
+  <small class="edit-document-diff">
+    {{> diffParts}}
+  </small>
+</template>
+
 
 <template name="editDocFormControls">
   {{#if create}}
@@ -15,17 +38,27 @@
       <button type="submit" disabled>Updating...</button>
       <button type="reset" class="aqua">Cancel</button>
     {{else}}
-      <button type="submit" class="aqua">Commit</button>
+      {{#unless editDoc.hasChanges}}
+        <button type="submit" disabled>Commit</button>
+      {{else}}
+        <button type="submit" class="aqua">Commit</button>
+      {{/unless}}
     {{/unless}}
     <button type="button" class="form__actions__delete">Delete</button>
   {{/if}}
-  <ul>
-    <li class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">{{editDoc.fromNowOrNow}}</li>
-    <li class="edit-document-action">{{editDoc.action}}</li>
-    <li class="edit-document-status">{{editDoc.state}}</li>
-    <li class="edit-document-status">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</li>
-  </ul>
+  <span class="edit-document-form-messages">
+    <small class="edit-document-action">{{editDoc.action}}</small>
+    <small class="edit-document-status">{{editDoc.state}}</small>
+    <small class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">updated {{editDoc.fromNowOrNow}}</small>
+  </span>
+
+  <br>
+  <br>
+  <span class="edit-document-form-debug" style="color: lightgrey;">
+    <small class="edit-document-status">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</small>
+  </span>
 </template>
+
 
 <template name='diffParts'>
   {{#each parts}}
