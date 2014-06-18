@@ -36,7 +36,7 @@
   {{else}}
     {{#unless editDocIsReady}}
       <button type="submit" disabled>Updating...</button>
-      <button type="reset" class="aqua">Cancel</button>
+      <button type="reset" class="aqua">Cancel commit</button>
     {{else}}
       {{#unless editDoc.hasChanges}}
         <button type="submit" disabled>Commit</button>
@@ -44,18 +44,23 @@
         <button type="submit" class="aqua">Commit</button>
       {{/unless}}
     {{/unless}}
-    <button type="button" class="form__actions__delete">Delete</button>
+    <div class="form-control" style="float: right;">
+      <label for="{{docType}}-{{docId}}-delete">Tick to delete</label>
+      <input type="checkbox" id="{{docType}}-{{docId}}-delete" name="delete" value="true" class="form__actions__delete">
+    </div>
   {{/if}}
-  <span class="edit-document-form-messages">
-    <small class="edit-document-action">{{editDoc.action}}</small>
-    <small class="edit-document-status">{{editDoc.state}}</small>
-    <small class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">updated {{editDoc.fromNowOrNow}}</small>
+  <br>
+  <br>
+  <span class="edit-document-form-messages" style="float: right;">
+    <small>updated </small><small class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">{{editDoc.fromNowOrNow}}</small>
   </span>
 
   <br>
   <br>
   <span class="edit-document-form-debug" style="color: lightgrey;">
-    <small class="edit-document-status">{{editDoc.response.statusCode}}: {{editDoc.response.content}}</small>
+    <small class="edit-document-action" style="float: right;">{{editDoc.action}}</small><small style="float: right;"> | </small>
+    <small class="edit-document-status" style="float: right;">{{editDoc.state}}</small><br>
+    <small class="edit-document-status">{{editDoc.response.statusCode}} {{editDoc.response.content}}</small>
   </span>
 </template>
 
