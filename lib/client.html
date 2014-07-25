@@ -1,34 +1,80 @@
-
-<template name="editDocFormInput">
-
+<template name="editDocFormLabel">
   <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
-  <input class="edit-document-form-input" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
-  <small class="edit-document-diff">
-    {{> diffParts}}
-  </small>
-
 </template>
 
+<template name="editDocFormText">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-text" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormCheckbox">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-checkbox" type="checkbox" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormRadio">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-radio" type="radio" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormPassword">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-password" type="password" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormHidden">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-hidden" type="hidden" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormTextarea">
+  {{> editDocFormLabel}}
+
+  <textarea class="edit-document-form-input" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
+    {{inputValue}}
+  </textarea>
+
+  {{> diffParts}}
+</template>
 
 <template name="editDocFormSelect">
-  <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
-  <select
-    class="edit-document-form-select"
-    data-data-type="integer"
-    data-doc-id="{{docId}}"
-    data-doc-type="{{docType}}"
-    id="{{docType}}-{{docId}}-{{nameSpace}}"
-    name="{{nameSpace}}">
+  {{> editDocFormLabel}}
+
+  <select class="edit-document-form-select" data-data-type="integer" data-doc-id="{{docId}}" data-doc-type="{{docType}}" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
     {{#each selectDocuments}}
       <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
     {{/each}}
   </select>
 
-  <small class="edit-document-diff">
-    {{> diffParts}}
-  </small>
+  {{> diffParts}}
 </template>
 
+<template name="editDocFormSelectMultiple">
+  {{> editDocFormLabel}}
+
+  <select class="edit-document-form-select-multiple" data-data-type="array" data-doc-id="{{docId}}" data-doc-type="{{docType}}" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" multiple>
+    {{#each selectDocuments}}
+      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
+    {{/each}}
+  </select>
+
+  {{> diffParts}}
+</template>
 
 <template name="editDocFormControls">
   {{#if create}}
@@ -46,17 +92,18 @@
     {{/unless}}
     <div class="form-control" style="float: right;">
       <label for="{{docType}}-{{docId}}-delete">Tick to delete</label>
-      <input type="checkbox" id="{{docType}}-{{docId}}-delete" name="delete" value="true" class="form__actions__delete">
+      <input type="checkbox" id="{{docType}}-{{docId}}-delete" name="delete" class="form__actions__delete">
     </div>
   {{/if}}
-  <br>
-  <br>
-  <span class="edit-document-form-messages" style="float: right;">
-    <small>updated </small><small class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">{{editDoc.fromNowOrNow}}</small>
-  </span>
 
-  <br>
-  <br>
+  <br />
+
+  <div class="edit-document-form-messages" style="float: right;">
+    {{> editDocTimeSince}}
+  </div>
+
+  <br />
+
   <span class="edit-document-form-debug" style="color: lightgrey;">
     <small class="edit-document-action" style="float: right;">{{editDoc.action}}</small><small style="float: right;"> | </small>
     <small class="edit-document-status" style="float: right;">{{editDoc.state}}</small><br>
@@ -64,10 +111,27 @@
   </span>
 </template>
 
+<template name="editDocTimeSince">
+  <small>updated </small>
+  <small class="edit-document-time-since" data-timestamp="{{editDoc.updatedAt}}">{{editDoc.fromNowOrNow}}</small>
+</template>
 
 <template name='diffParts'>
-  {{#each parts}}
-    {{#if added}}<span style='background-color: lightgreen; text-decoration: underline;'>{{value}}</span>{{/if}}<!--
-    -->{{#if removed}}<span style='background-color: pink; text-decoration: line-through;'>{{value}}</span>{{/if}}{{#unless removed}}{{#unless added}}<span>{{value}}</span>{{/unless}}{{/unless}}
-  {{/each}}
+  <small class="edit-document-diff">
+    {{#each parts}}
+      {{#if added}}
+        <span style='background-color: lightgreen; text-decoration: underline;'>{{value}}</span>
+      {{/if}}
+
+      {{#if removed}}
+        <span style='background-color: pink; text-decoration: line-through;'>{{value}}</span>
+      {{/if}}
+
+      {{#unless removed}}
+        {{#unless added}}
+          <span>{{value}}</span>
+        {{/unless}}
+      {{/unless}}
+    {{/each}}
+  </small>
 </template>
