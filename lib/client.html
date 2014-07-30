@@ -2,18 +2,34 @@
   <label for="{{docType}}-{{docId}}-{{nameSpace}}">{{verboseName}}</label>
 </template>
 
-<template name="editDocFormText">
+<template name="editDocFormCheckbox">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-text" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-checkbox" type="checkbox" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" {{checked}} />
 
   {{> diffParts}}
 </template>
 
-<template name="editDocFormCheckbox">
+<template name="editDocFormDatetime">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-checkbox" type="checkbox" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-date" type="datetime-local" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{datetime}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormHidden">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-hidden" type="hidden" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+
+  {{> diffParts}}
+</template>
+
+<template name="editDocFormPassword">
+  {{> editDocFormLabel}}
+
+  <input class="edit-document-form-password" type="password" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" />
 
   {{> diffParts}}
 </template>
@@ -26,18 +42,10 @@
   {{> diffParts}}
 </template>
 
-<template name="editDocFormPassword">
+<template name="editDocFormText">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-password" type="password" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
-
-  {{> diffParts}}
-</template>
-
-<template name="editDocFormHidden">
-  {{> editDocFormLabel}}
-
-  <input class="edit-document-form-hidden" type="hidden" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-text" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
 
   {{> diffParts}}
 </template>
@@ -55,7 +63,7 @@
 <template name="editDocFormSelect">
   {{> editDocFormLabel}}
 
-  <select class="edit-document-form-select" data-data-type="integer" data-doc-id="{{docId}}" data-doc-type="{{docType}}" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
+  <select class="edit-document-form-select" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
     {{#each selectDocuments}}
       <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
     {{/each}}
@@ -67,7 +75,7 @@
 <template name="editDocFormSelectMultiple">
   {{> editDocFormLabel}}
 
-  <select class="edit-document-form-select-multiple" data-data-type="array" data-doc-id="{{docId}}" data-doc-type="{{docType}}" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" multiple>
+  <select class="edit-document-form-select-multiple" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" multiple>
     {{#each selectDocuments}}
       <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
     {{/each}}
