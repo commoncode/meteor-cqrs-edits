@@ -9,6 +9,7 @@ Npm.depends({
 Package.on_use(function (api) {
   api.use(['templating', 'moment'], 'client');
   api.use('collection-helpers');
+  api.use('underscore');
 
   api.add_files('lib/common.js', ['client', 'server']);
   api.add_files(['lib/client.html', 'lib/client.js'], 'client');

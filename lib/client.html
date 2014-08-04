@@ -21,7 +21,7 @@
 <template name="editDocFormHidden">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-hidden" type="hidden" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-hidden" type="hidden" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{value}}" />
 
   {{> diffParts}}
 </template>
@@ -37,7 +37,7 @@
 <template name="editDocFormRadio">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-radio" type="radio" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-radio" type="radio" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{value}}" />
 
   {{> diffParts}}
 </template>
@@ -45,7 +45,7 @@
 <template name="editDocFormText">
   {{> editDocFormLabel}}
 
-  <input class="edit-document-form-text" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{inputValue}}" />
+  <input class="edit-document-form-text" type="text" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" value="{{value}}" />
 
   {{> diffParts}}
 </template>
@@ -54,7 +54,7 @@
   {{> editDocFormLabel}}
 
   <textarea class="edit-document-form-input" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
-    {{inputValue}}
+    {{value}}
   </textarea>
 
   {{> diffParts}}
@@ -77,7 +77,7 @@
 
   <select class="edit-document-form-select-multiple" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" multiple>
     {{#each selectDocuments}}
-      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
+      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{_id}} {{title}}</option>
     {{/each}}
   </select>
 
