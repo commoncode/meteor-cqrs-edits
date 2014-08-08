@@ -63,25 +63,15 @@
 <template name="editDocFormSelect">
   {{> editDocFormLabel}}
 
-  <select class="edit-document-form-select" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}">
-    {{#each selectDocuments}}
-      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{title}}</option>
-    {{/each}}
+  <select class="edit-document-form-select" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" {{multiple}}>
+    {{#each selectDocuments}}{{> editDocFormSelectOption}}{{/each}}
   </select>
 
   {{> diffParts}}
 </template>
 
-<template name="editDocFormSelectMultiple">
-  {{> editDocFormLabel}}
-
-  <select class="edit-document-form-select-multiple" id="{{docType}}-{{docId}}-{{nameSpace}}" name="{{nameSpace}}" multiple>
-    {{#each selectDocuments}}
-      <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{_id}} {{title}}</option>
-    {{/each}}
-  </select>
-
-  {{> diffParts}}
+<template name="editDocFormSelectOption">
+  <option value={{_id}} {{selectedAttr}}>{{#if isSelected}}•{{/if}} {{_id}} {{title}}</option>
 </template>
 
 <template name="editDocFormControls">
