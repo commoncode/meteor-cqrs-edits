@@ -7,12 +7,12 @@ Npm.depends({
 });
 
 Package.on_use(function (api) {
-  api.use(['templating', 'jquery', 'moment'], 'client');
-  api.use(['underscore', 'collection-helpers', 'sharejs']);
+  api.use(['templating', 'jquery', 'mrt:moment'], 'client');
+  api.use(['coffeescript', 'underscore', 'dburles:collection-helpers', 'sharejs']);
 
-  api.add_files('lib/common.js', ['client', 'server']);
-  api.add_files(['lib/client.html', 'lib/client.js'], 'client');
-  api.add_files('lib/server.js', 'server');
+  api.add_files('lib/common.coffee', ['client', 'server']);
+  api.add_files(['lib/client.html', 'lib/client.coffee'], 'client');
+  api.add_files('lib/server.coffee', 'server');
 
   api.export(['CQRS', 'EditDiffs', 'EditDocuments']);
 });
