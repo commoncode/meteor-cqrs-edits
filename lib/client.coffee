@@ -27,6 +27,14 @@ initOTDoc = ->
     if error
       return console.log error
 
+    doc.on('insert', (pos, text) ->
+      return console.log pos, text
+    )
+
+    doc.on('delete', (pos, text) ->
+      return console.log pos, text
+    )
+
     template.shareDoc = doc
   )
 
@@ -36,24 +44,27 @@ updateEditDoc = (event, template) ->
   value = event.currentTarget.value
   params = {}
   $input = null
-  applyOT = (doc, oldValue) ->
+  applyOT = (oldValue) ->
     end = 0
     start = 0
 
     if oldValue is value
       return
 
-    while oldValue.charAt start is value.charAt start
+    while oldValue.charAt(start) is value.charAt(start)
       start += 1
 
-    while oldValue.charAt(oldValue.length - 1 - end) is value.charAt(value.length - 1 - end) and end + start < oldValue.length && end + start < value.length
+    while oldValue.charAt(oldValue.length - 1 - end) is
+    value.charAt(value.length - 1 - end) and
+    end + start < oldValue.length and
+    end + start < value.length
       end += 1
 
     if oldValue.length isnt start + end
-      doc.del(start, oldValue.length - start - end)
+      return template.shareDoc.del(start, oldValue.length - start - end)
 
     if value.length isnt start + end
-      return doc.insert(start, value.slice(start, value.length - end))
+      return template.shareDoc.insert(start, value.slice(start, value.length - end))
 
   switch event.currentTarget.type
     when 'checkbox'
@@ -86,7 +97,7 @@ updateEditDoc = (event, template) ->
       if value is template.shareDoc.getText()
         return
 
-      applyOT(template.shareDoc, template.shareDoc.getText())
+      applyOT(template.shareDoc.getText())
       value = template.shareDoc.getText()
       $input = template.$('input')
 
@@ -114,7 +125,12 @@ keyupEvent =
   'blur': (event, template) ->
     Session.set('cursorPosition', null)
 
-  'keyup': (event, template) ->
+  'keyup, keypress': (event, template) ->
+    key = event.keyCode or event.charCode
+
+    if event.type is 'keyup' and key not in [8, 46]
+      return false
+
     if debouncedUpdateEditDoc is undefined
       # Once we have an instantiated singleton of the
       # debounced function we don't need to create it again.
