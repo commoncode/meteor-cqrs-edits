@@ -27,14 +27,6 @@ initOTDoc = ->
     if error
       return console.log error
 
-    doc.on('insert', (pos, text) ->
-      return console.log pos, text
-    )
-
-    doc.on('delete', (pos, text) ->
-      return console.log pos, text
-    )
-
     template.shareDoc = doc
   )
 
@@ -61,10 +53,12 @@ updateEditDoc = (event, template) ->
       end += 1
 
     if oldValue.length isnt start + end
-      return template.shareDoc.del(start, oldValue.length - start - end)
+      template.shareDoc.del(start, oldValue.length - start - end)
 
     if value.length isnt start + end
-      return template.shareDoc.insert(start, value.slice(start, value.length - end))
+      template.shareDoc.insert(start, value.slice(start, value.length - end))
+
+    return
 
   switch event.currentTarget.type
     when 'checkbox'
@@ -93,13 +87,18 @@ updateEditDoc = (event, template) ->
 
     when 'text', 'textarea'
       value = value.replace(/\r\n/g, '\n')
+      oldValue = template.shareDoc.getText()
 
-      if value is template.shareDoc.getText()
+      if value is oldValue
         return
 
-      applyOT(template.shareDoc.getText())
+      applyOT(oldValue)
       value = template.shareDoc.getText()
-      $input = template.$('input')
+
+      Session.set('cursorPosition',
+        start: event.currentTarget.selectionStart
+        end: event.currentTarget.selectionEnd
+      )
 
   params[name] = value
 
@@ -107,15 +106,9 @@ updateEditDoc = (event, template) ->
     _id: $form.data 'editDocId'
   ,
     $set: params
-  , (error, quantity) ->
-    cursor = Session.get 'cursorPosition'
-
-    if error
-      return console.log error
-
-    if $input and cursor
-      $input.selectRange(cursor.start, cursor.end)
   )
+
+debouncedUpdateEditDoc = _.debounce(updateEditDoc, 750)
 
 # Template Events
 changeEvent =
@@ -130,18 +123,6 @@ keyupEvent =
 
     if event.type is 'keyup' and key not in [8, 46]
       return false
-
-    if debouncedUpdateEditDoc is undefined
-      # Once we have an instantiated singleton of the
-      # debounced function we don't need to create it again.
-      # We create the function here so we have access to underscore '_'
-      # However, that might be available if we put it in package.js. TODO @@@
-      debouncedUpdateEditDoc = _.debounce(updateEditDoc, 500)
-
-    Session.set('cursorPosition',
-      start: event.currentTarget.selectionStart
-      end: event.currentTarget.selectionEnd
-    )
 
     debouncedUpdateEditDoc(event, template)
 
@@ -296,16 +277,33 @@ CQRS.editEvents =
 # UI Helpers
 UI.registerHelper('editFormAttrs', ->
   try
-    return {
+    doc = @.editDoc()
+
+    attributes =
       # conveniently & cleanly decorate our editDoc forms
       # with all the necessary attrs needed to identify the form
       # appropriately
-      'data-edit-doc-id': @.editDoc()._id
+      'data-edit-doc-id': doc._id
       'data-id': @._id
-      'data-doc-id': @.editDoc().docId
-      'data-doc-type': @.editDoc().docType
-      'id': @.editDoc().docType + '-' + @.editDoc().docId
-    }
+      'data-doc-id': doc.docId
+      'data-doc-type': doc.docType
+      'id': doc.docType + '-' + doc.docId
+
+    Deps.autorun ->
+      EditDocuments.find(
+        _id: doc._id
+      ).observeChanges
+          changed: (id, fields) ->
+            cursor = Session.get 'cursorPosition'
+
+            for own key, value of fields
+              $field = $("form##{attributes.id} [name=#{key}]")
+              $field.val(value)
+
+              if cursor
+                $field.selectRange(cursor.start, cursor.end)
+
+    return attributes
   catch error
     # We shouldn't be getting an erorr here, but we are.  Seems like
     # racey stuff happening, i.e. the editDoc call hasn't yet had the chance
