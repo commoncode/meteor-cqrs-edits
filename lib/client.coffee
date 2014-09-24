@@ -108,7 +108,7 @@ updateEditDoc = (event, template) ->
     $set: params
   )
 
-debouncedUpdateEditDoc = _.debounce(updateEditDoc, 750)
+debouncedUpdateEditDoc = _.debounce(updateEditDoc, 300)
 
 # Template Events
 changeEvent =
